@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class flashlight extends Activity {
     private boolean status = false;
-    private Camera cam = Camera.open();
+    private Camera cam;
 
     /**
      * Called when the activity is first created.
@@ -30,7 +30,9 @@ public class flashlight extends Activity {
                     p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                     cam.setParameters(p);
                     cam.stopPreview();
+                    cam.release();
                 } else {
+                    cam =  Camera.open();
                     bt.setText(R.string.turn_off);
                     Camera.Parameters p = cam.getParameters();
                     p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -40,5 +42,11 @@ public class flashlight extends Activity {
                 status = !status;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cam.release();
     }
 }
